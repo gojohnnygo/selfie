@@ -1,0 +1,11 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  form(method="post")
+    fieldset
+      legend General
+      p asdf
+        label Username:
+          input(type="text", name="user[name]", value=user.name)
