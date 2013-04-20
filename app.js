@@ -2,12 +2,35 @@
  * App dependencies
  */
 var express = require('express')
-  , app = express()
   , http = require('http')
   , path = require('path');
 
+var app = express();
+
 /**
- * Modules (separated into modules based on functionality)
+ * Config
+ */
+app.set('port', process.env.PORT || 3000);
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
+app.use(express.favicon());
+app.use(express.logger('dev'));
+app.use(express.bodyParser());
+app.use(express.cookieParser());
+app.use(express.session({ secret: 'secret'}));
+app.use(express.methodOverride());
+app.use(express.static('/public', path.join(__dirname, 'public')));
+
+app.configure('development', function(){
+    app.use(express.errorHandler());
+});
+
+app.configure('production', function(){
+    app.use(express.logger());
+});
+
+/**
+ * Modules (based on functionality)
  */
 var db = require('./lib/db')
   , auth = require('./lib/auth')
@@ -20,29 +43,12 @@ app.use(user);
 app.use(photo);
 
 /**
- * Config
- */
-app.configure(function() {
-    app.set('port', process.env.PORT || 3000);
-    app.set('views', __dirname + '/views');
-    app.set('view engine', 'jade');
-    app.use(express.favicon());
-    app.use(express.logger('dev'));
-    app.use(express.bodyParser());
-    app.use(express.cookieParser());
-    app.use(express.session({ secret: 'secret'}));
-    app.use(express.methodOverride());
-    app.use(app.router);
-    app.use(express.static(path.join(__dirname, 'public')));
-});
-
-app.configure('development', function(){
-    app.use(express.errorHandler());
-});
-
-/**
  * 
  */
-http.createServer(app).listen(app.get('port'), function(){
-  console.log("Express server listening on port " + app.get('port'));
+http.createServer(app).listen(app.get('port'), function(err){
+    if (err) {
+        console.log("Error: " + err);
+    } else {
+        console.log("Express server listening on port " + app.get('port'));
+    }
 });
