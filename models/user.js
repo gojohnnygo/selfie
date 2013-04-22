@@ -5,7 +5,6 @@ var path = require("path")
 // user schema
 var userSchema = mongo.mongoose.Schema({
     provider: String,
-    provider_id: String,
     username: String,
     avatar_url: String,
     credits: Number,

@@ -19,7 +19,7 @@ module.exports = function(app) {
     app.get("/logout", auth.logout);
     app.get("/success", auth.success);
 
-    // // user
+    // user
     app.get("/users", controllerUser.getAll);
     app.get("/user/:uid", controllerUser.getUser);
     app.get("/user/:uid/photos", controllerUser.getPhotos);
@@ -43,9 +43,4 @@ module.exports = function(app) {
 
     app.put("/photo/:pid/like", controllerPhoto.likePhoto);
     app.put("/photo/:pid/unlike", controllerPhoto.unlikePhoto);
-
-    // catch all
-    app.get("*", function(req, res) {
-        console.log("What are you doing?")
-    });
 }

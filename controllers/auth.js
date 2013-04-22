@@ -2,29 +2,17 @@
 var path = require("path")
   , passport = require(path.join("..", "lib", "passport"));
 
-exports.twitter = function(req, res) {
-	passport.authenticate('twitter');
-};
+exports.twitter = passport.authenticate("twitter");
 
-exports.twitterCallback = function(req, res) {
-	passport.authenticate('twitter', { successRedirect: '/', failureRedirect: '/login' });
-};
+exports.twitterCallback = passport.authenticate("twitter", { successRedirect: '/success', failureRedirect: '/login' });
 
-exports.facebook = function(req, res) {
-	passport.authenticate('facebook');
-};
+exports.facebook = passport.authenticate("facebook");
 
-exports.facebookCallback = function(req, res) {
-	passport.authenticate('facebook', { successRedirect: '/', failureRedirect: '/login' });
-};
+exports.facebookCallback = passport.authenticate("facebook", { successRedirect: '/', failureRedirect: '/login' });
 
-exports.google = function(req, res) {
-	passport.authenticate('google');
-};
+exports.google = passport.authenticate("google");
 
-exports.googleCallback = function(req, res) {
-	passport.authenticate('google', { successRedirect: '/', failureRedirect: '/login' });
-};
+exports.googleCallback = passport.authenticate("google", { successRedirect: '/', failureRedirect: '/login' });
 
 exports.login = function(req, res) {
 	req.login(user, function(err) {
@@ -39,5 +27,6 @@ exports.logout = function(req, res) {
 };
 
 exports.success = function(req, res) {
-
+	console.log("success");
+	res.redirect("/");
 };

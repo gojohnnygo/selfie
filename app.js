@@ -2,8 +2,8 @@
 var express = require("express")
   , http = require("http")
   , path = require("path")
-  , routes = require("./routes")
-  , passport = require(path.join(__dirname, "lib", "passport"));
+  , passport = require(path.join(__dirname, "lib", "passport"))
+  , routes = require("./routes");
 
 var app = express();
 
@@ -13,14 +13,14 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'jade');
 app.use(express.favicon());
 app.use(express.logger('dev'));
-app.use(express.bodyParser());
 app.use(express.cookieParser());
+app.use(express.bodyParser());
 app.use(express.session({ secret: 'secret'}));
 app.use(express.methodOverride());
 app.use(express.static('/public', path.join(__dirname, 'public')));
-app.use(app.router);
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(app.router);
 
 routes(app);
 
