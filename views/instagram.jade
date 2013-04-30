@@ -1,6 +1,4 @@
 script
-	var media = !{encodeURIComponent(JSON.stringify(media)) };
-	
-	
+	var media = !{ JSON.stringify(JSON.parse(media)) };
 
-p #{media.pagination}
+p #{media["pagination"]}

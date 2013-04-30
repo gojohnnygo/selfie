@@ -56,10 +56,8 @@ exports.getPhotos = function(req, res) {
 
 			response.on("end", function() {
 				// res.send(chunk)
-				//res.render("instagram", { media: chunk});
-				// res.render("instagram", { media: chunk });
-				JSON.parse(chunk)
-				console.log(chunk)
+				console.log(chunk);
+				res.render("instagram", { media: chunk });
 			});
 
 			response.on("close", function() {
