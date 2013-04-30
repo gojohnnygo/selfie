@@ -1,29 +1,14 @@
 // dependencies
 var path = require("path")
-  , User = require(path.join("..", "models", "user"));
+  , User = require(path.join("..", "models", "user"))
+  , Photo = require(path.join("..", "models", "photo"))
+  , mongo = require(path.join("..", "lib", "mongo"))
+  , controllerInstagram = require(path.join(__dirname, "instagram"))
+  , mongoose = mongo.mongoose
+  , fs = require('fs'); 
 
-/**
- * Param Helpers
- */
-// app.param('uid', function(req, res, next, id) {
-//     User.find({_id: id}, function (err, docs) {
-//         if (err) res.json(err);
-//         req.user = docs[0];
-//         next();
-//     });
-// });
-
-// app.param('pid', function(req, res, next, id) {
-//     Photo.find({_id: id}, function (err, docs) {
-//         if (err) res.json(err);
-//         req.photo = docs[0];
-//         next();
-//     });
-// });
-
-
+// call for testing
 exports.getAll = function(req, res) {
-    console.log("get suers");
     User.find({}, function (err, docs) {
         if (err) res.json(err);
         res.send(docs);
@@ -31,46 +16,57 @@ exports.getAll = function(req, res) {
 };
 
 exports.getUser = function(req, res) {
-    
-};
-
-exports.getPhotos = function(req, res) {
-    
-};
-
-exports.getPhoto = function(req, res) {
-    
-};
-
-exports.getLikes = function(req, res) {
-    
-};
-
-exports.getFollowing = function(req, res) {
-    
-};
-
-exports.getFollowers = function(req, res) {
-    
-};
-
-exports.createUser = function(req, res) {
-    var b = req.body;
-
-    new User({
-        username: b.username,
-    }).save(function (err, docs){
+    User.findOne({ _id: req.params.uid }, function (err, docs) {
         if (err) res.json(err);
-        res.send(docs);
+        res.render("user");
+        // res.send(docs); // send just info when not using jade
     });
-
 };
 
+// for later, will get all likes/following/followers on initial call
+exports.getPhotos = function(req, res) {};
+exports.getLikes = function(req, res) {};
+exports.getFollowing = function(req, res) {};
+exports.getFollowers = function(req, res) {};
+
+// later
 exports.uploadPhoto = function(req, res) {
-    
+    var pid
+      , tmp
+      , target
+      , path;
+
+    pid = new mongoose.Types.ObjectId;
+    tmp = req.files.userPhoto.path;
+    target = './public/images/' + pid;
+    path = '/images/' + pid;
+
+    fs.rename(tmp, target, function(err) {
+        if(err) throw err;
+        fs.unlink(tmp, function() {
+            if (err) throw err;
+            
+            new Photo({
+                _id: pid,
+                owner: req.params.uid
+            }).save(function (err, docs){
+                if (err) res.json(err);
+
+                req.user.photos.push(pid);
+                console.log(req.user);
+                console.log(docs);
+              });
+
+            res.send(JSON.stringify({path: path}));
+        });
+    });
 };
 
-exports.editUser  = function(req, res) {
+exports.addCredits = function(req, res) {
+
+};
+
+exports.editUser = function(req, res) {
     
 };
 
