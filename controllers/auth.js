@@ -2,7 +2,7 @@
 var path = require("path")
   , passport = require(path.join("..", "lib", "passport"));
 
-var routes = { successRedirect: '/', failureRedirect: '/login' }
+var routes = { successRedirect: "/", failureRedirect: "/login" }
 
 exports.instagram = passport.authenticate("instagram");
 exports.instagramCallback = passport.authenticate("instagram", routes);

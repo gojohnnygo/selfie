@@ -8,17 +8,19 @@ var path = require("path")
   , fs = require('fs'); 
 
 // call for testing
-exports.getAll = function(req, res) {
-    User.find({}, function (err, docs) {
-        if (err) res.json(err);
-        res.send(docs);
-    });
-};
+// exports.getAll = function(req, res) {
+//     User.find({}, function (err, docs) {
+//         if (err) res.json(err);
+//         res.send(docs);
+//     });
+// };
 
 exports.getUser = function(req, res) {
+    console.log("getUser " + req.user);
     User.findOne({ _id: req.params.uid }, function (err, docs) {
         if (err) res.json(err);
-        res.render("user");
+
+        res.render("user", { user: req.user });
         // res.send(docs); // send just info when not using jade
     });
 };

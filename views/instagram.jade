@@ -1,4 +1,11 @@
-script
-	var media = !{ JSON.stringify(JSON.parse(media)) };
+extends layout
 
-p #{media["pagination"]}
+block content
+	if media.pagination.next_url
+		a(href=media.pagination.next_url) Get More Photos
+
+	ul
+		each data in media.data
+			li
+				input(type="checkbox")
+				img(src=data.images.thumbnail.url)

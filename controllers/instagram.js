@@ -7,35 +7,38 @@ var path = require("path")
 
 var ENDPOINT = "api.instagram.com";
 var PATH = "/v1/users/";
+// var nextPage = "";
 
-function getCleanId(auth) {
-	return auth.split("-")[1];
-}
+// function getCleanId(auth) {
+// 	console.log("getCleanId");
+// 	return auth.split("-")[1];
+// }
 
-exports.getInfo = function(req, res) {
-    User.findOne({ _id: req.cookies.id }, function (err, docs) {
-        if (err) res.json(err);
+// exports.getInfo = function(req, res) {
+//     User.findOne({ _id: req.cookies.id }, function (err, docs) {
+//         if (err) res.json(err);
 
-        var options = {
-	    	host: ENDPOINT,
-	    	path: PATH + getCleanId(docs.auth) + "/?access_token=" + docs.token
-	    }
+//         var options = {
+// 	    	host: ENDPOINT,
+// 	    	path: PATH + getCleanId(docs.auth) + "/?access_token=" + docs.token
+// 	    }
 
-	    var callback = function(response) {
-			response.on("data", function(data) {
-				res.render("profile", { info: data });
-			});
+// 	    var callback = function(response) {
+// 			response.on("data", function(data) {
+// 				res.render("profile", { info: data });
+// 			});
 
-			response.on("error", function(err) {
-				console.log(err);
-			});
-		};
+// 			response.on("error", function(err) {
+// 				console.log(err);
+// 			});
+// 		};
 
-		https.get(options, callback);
-    });
-}
+// 		https.get(options, callback);
+//     });
+// }
 
 exports.getPhotos = function(req, res) {
+	console.log(req.user);
     User.findOne({ _id: req.user }, function (err, docs) {
         if (err) res.json(err);
 
@@ -45,9 +48,9 @@ exports.getPhotos = function(req, res) {
 	    }
 
 	    var callback = function(response) {
-			var chunk = "";
-			response.on("data", function(data) {
-				chunk += data;
+			var data = "";
+			response.on("data", function(chunk) {
+				data += chunk;
 			});
 
 			response.on("error", function(err) {
@@ -55,9 +58,7 @@ exports.getPhotos = function(req, res) {
 			});
 
 			response.on("end", function() {
-				// res.send(chunk)
-				console.log(chunk);
-				res.render("instagram", { media: chunk });
+				res.render("instagram", {media: JSON.parse(data) });
 			});
 
 			response.on("close", function() {

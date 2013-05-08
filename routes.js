@@ -28,18 +28,18 @@ module.exports = function(app) {
     app.get("/logout", auth.logout);
 
     // instagram
-    app.get("/instagram/info", controllerInstagram.getInfo);
-    app.get("/instagram/photos", controllerInstagram.getPhotos);
+    // app.get("/instagram/info", controllerInstagram.getInfo);
+    // app.get("/instagram/photos", controllerInstagram.getPhotos);
 
     // user
-    app.get("/users", controllerUser.getAll);
-    app.get("/user/:uid", controllerUser.getUser);
-    app.get("/user/:uid/photos", controllerUser.getPhotos);
-    app.get("/user/:uid/likes", controllerUser.getLikes);
-    app.get("/user/:uid/following", controllerUser.getFollowing);
-    app.get("/user/:uid/followers", controllerUser.getFollowers);
+    // app.get("/users", controllerUser.getAll);
+    // app.get("/user/:uid", controllerUser.getUser);
+    // app.get("/user/:uid/photos", controllerUser.getPhotos);
+    // app.get("/user/:uid/likes", controllerUser.getLikes);
+    // app.get("/user/:uid/following", controllerUser.getFollowing);
+    // app.get("/user/:uid/followers", controllerUser.getFollowers);
 
-    app.get("/user/:uid/instagram", controllerInstagram.getPhotos);
+    // app.get("/user/:uid/instagram/photos", controllerInstagram.getPhotos);
 
     app.post("/user/:uid/photo", controllerUser.uploadPhoto);
     app.post("/user/:uid/credits", controllerUser.addCredits);
@@ -57,11 +57,16 @@ module.exports = function(app) {
     app.put("/photo/:pid/like", controllerPhoto.likePhoto);
     app.put("/photo/:pid/unlike", controllerPhoto.unlikePhoto);
 
+
+    app.get("/user/:uid", controllerUser.getUser);
+
     // temp photo upload
     app.get('/', function(req, res) {
+        console.log("index " + req.user);
         if (req.user) {
-            res.cookie("id", (req.user).toString());
-            res.redirect("/user/" + req.user);
+            // res.cookie("id", (req.user._id).toString());
+            console.log(typeof req.user._id.toString());
+            res.redirect("/user/" + req.user._id.toString());
         }
 
         res.render("index");
